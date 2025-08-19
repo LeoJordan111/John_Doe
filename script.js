@@ -1,55 +1,94 @@
 
-buttonlight.addEventListener('click', () => {
+  // Gestion du mode clair/sombre
+  const buttonlight = document.getElementById('buttonlight');
+  document.body.style.backgroundColor = 'black';
+  document.body.style.color = 'white';
+  buttonlight.innerText = 'Lightmode';
 
-       if  (document.body.style.backgroundColor=='black') {
-            document.body.style.backgroundColor='white';
-            document.body.style.color='black';
-            document.getElementById('buttonlight').innerText = 'Retour au darkmode';
+  buttonlight.addEventListener('click', () => {
+    if (document.body.style.backgroundColor === 'black') {
+      document.body.style.backgroundColor = 'white';
+      document.body.style.color = 'black';
+      buttonlight.innerText = 'Retour au darkmode';
     } else {
-            document.body.style.backgroundColor='black';
-            document.body.style.color='white';
-            document.getElementById('buttonlight').innerText = 'Lightmode';
-}
-}
-)
-
-const galleryItem = document.querySelectorAll('.gallery-item');
-
-galleryItem.forEach(galleryItem => {
-    galleryItem.addEventListener('click', () => {
-        if  (galleryItem.style.width == '45%') {
-        galleryItem.style.width = '100%';
-        galleryItem.style.position = 'absolute';
-    } else {
-        galleryItem.style.width = '45%';
-        galleryItem.style.position = 'relative';
+      document.body.style.backgroundColor = 'black';
+      document.body.style.color = 'white';
+      buttonlight.innerText = 'Lightmode';
     }
+  });
+
+  // Gestion de la galerie d'images
+const galleryItems = document.querySelectorAll('.gallery-item');
+  galleryItems.forEach(item => {
+    const img = item.querySelector('.img');
+    item.addEventListener('click', () => {
+      if (img.id === 'image-paysage') {
+        item.style.backgroundColor = 'blue';
+      } else {
+        if (img.classList.contains('img-active')) {
+          img.classList.remove('img-active');
+        } else {
+          galleryItems.forEach(otherItem => {
+            otherItem.querySelector('.img').classList.remove('img-active');
+          });
+          img.classList.add('img-active');
+        }
+      }
     });
   });
 
-     // avec l'ID
-     const nature = document.querySelector('#nature')     
+  const nature = document.querySelector('#nature');
+  nature.addEventListener('click', () => {
+    const existingParagraphe = document.querySelector('#paragraphe');
 
-     nature.addEventListener('click', () => {
-        const paragraphe = document.querySelector('#paragraphe')
+    if (existingParagraphe) {
+      existingParagraphe.remove();
+    } else {
+      const paragraphe = document.createElement('p');
+      const text = 'Coucou tu as trouvé Charlie !!';
+      paragraphe.innerText = text;
+      paragraphe.id = 'paragraphe';
+      nature.appendChild(paragraphe);
+    }
+  });
 
-        if  (paragraphe) {
-            paragraphe.remove()
-        } else {
-            const paragraphe = document.createElement('p')
-        
-        const text = 'Coucou tu as trouvé Charlie !!'
-        //innertext remplace et textcontent ajoute à la suite
-        paragraphe.innerText = text
-        paragraphe.id = 'paragraphe'
-        // console.log(paragraphe)
+  const buttonjeu = document.getElementById('buttonjeu');
+  buttonjeu.addEventListener('click', () => {
+    alert('Où est Charlie !!?');
+  });
 
-        // à quelle élèment je vais le mettre en enfant
-        nature.appendChild(paragraphe)
-        }
-     }
-    )
+  // Gestion du carrousel d'images
+  const slider = document.getElementById('homepage-slider');
+  const imagesInner = slider.querySelector('.images-inner');
+  const slides = slider.querySelectorAll('.image-slide');
+  const prevButton = document.getElementById('button-prev');
+  const nextButton = document.getElementById('button-next');
+  const radios = slider.querySelectorAll('input[name="slider"]');
+  let currentIndex = 0;
 
-    buttonjeu.addEventListener('click', () => {
-        alert('Où est Charlie !!?')
-    })
+  function updateSlider(index) {
+    imagesInner.style.transform = `translateX(-${index * 0.001}%)`;
+    radios[index].checked = true;
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateSlider(currentIndex);
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    updateSlider(currentIndex);
+  }
+
+  nextButton.addEventListener('click', nextSlide);
+  prevButton.addEventListener('click', prevSlide);
+
+  radios.forEach((radio, index) => {
+    radio.addEventListener('change', () => {
+      currentIndex = index;
+      updateSlider(currentIndex);
+    });
+  });
+
+  setInterval(nextSlide, 3000);
